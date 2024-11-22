@@ -3,7 +3,15 @@ import { Grapejs } from "./component/grapejs/grapejs";
 import "@mantine/core/styles.css";
 function App() {
   return (
-    <MantineProvider>
+    <MantineProvider theme={{
+      fontSizes: {
+        md: "12px",
+        sm: "10px",
+        xs: "8px",
+        lg: "16px",
+        xl: "20px",
+      }
+    }}>
       <Grapejs />
     </MantineProvider>
   );

@@ -51,7 +51,7 @@ export const Grapejs = () => {
       ]}
       onEditor={onEditor}
     >
-      <AppShell aside={{ width: 300, breakpoint: "sm" }}>
+      <AppShell aside={{ width: 400, breakpoint: "sm" }}>
         <AppShell.Header>
           <Top  />
         </AppShell.Header>
