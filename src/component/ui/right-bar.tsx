@@ -267,7 +267,7 @@ const BlocksManager = ({
 }: any) => {
   console.log(JSON.stringify(mapCategoryBlocks, null, 2));
   return < >
-    {Array.from(mapCategoryBlocks).map(([category, blocks]) => {
+    {Array.from(mapCategoryBlocks as any).map(([category, blocks]: any) => {
       return <Stack key={category} >
         <Text size="md"
           className=" bg-slate-800 p-2 rounded-md"
