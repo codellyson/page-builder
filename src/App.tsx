@@ -1,14 +1,12 @@
-import { Grapejs } from './component/grapejs/grapejs'
-
+import { MantineProvider } from "@mantine/core";
+import { Grapejs } from "./component/grapejs/grapejs";
+import "@mantine/core/styles.css";
 function App() {
   return (
-    <div className="app-container">
-      <div className="editor-container">
-        <div className="panel__right"></div>
-        <Grapejs />
-      </div>
-    </div>
-  )
+    <MantineProvider>
+      <Grapejs />
+    </MantineProvider>
+  );
 }
 
-export default App 
+export default App;
