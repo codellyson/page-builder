@@ -1,6 +1,6 @@
-import { Accordion, ActionIcon, Box, Button, Center, ColorPicker, FileInput, Flex, Group, Radio, SegmentedControl, Select, SimpleGrid, Slider, Stack, Text, TextInput } from "@mantine/core";
+import { Accordion, ActionIcon, Box, Button, Center, ColorInput, ColorPicker, FileInput, Flex, Group, Radio, ScrollArea, SegmentedControl, Select, SimpleGrid, Slider, Stack, Text, TextInput } from "@mantine/core";
 import React, { useState } from "react";
-import { IconAlignBoxCenterStretch, IconBarrierBlock, IconBrush, IconCar, IconGrid3x3, IconLayersDifference, IconLayoutGrid, IconSettings, IconTrashFilled } from "@tabler/icons-react";
+import { IconAlignBoxCenterStretch, IconBarrierBlock, IconBrush, IconCar, IconChevronDown, IconChevronUp, IconGrid3x3, IconLayersDifference, IconLayoutGrid, IconSettings, IconTrashFilled } from "@tabler/icons-react";
 import { BlocksProvider, StylesProvider } from "@grapesjs/react";
 
 import type {
@@ -46,15 +46,17 @@ export const RightBar = () => {
   const [selected, setSelected] = useState("1");
 
   return (
-    <Box className="bg-slate-900 border-slate-800 p-2 text-white h-full flex flex-col gap-2">
-      <SegmentedControl
+    <Box className="" c="dark">
+     
+      <Stack className="flex-1"> 
+        <SegmentedControl
         value={selected}
         data={g_UI_CONTROLS}
         onChange={(value) => setSelected(value)}
         fullWidth
         size="sm"
+        h={30}
       />
-      <Stack className="flex-1">
         {selected === "1" && <Text>AlignBoxCenterStretch</Text>}
         {selected === "2" && <StylesProvider>
           {(props) => <StyleManager {...props} />}
@@ -73,7 +75,7 @@ export const RightBar = () => {
 
 
 const StyleManager = ({ sectors }: any) => {
-  return <Stack>
+  return <ScrollArea.Autosize mah={800} offsetScrollbars>
     {sectors.map((sector: any) => {
       return <Accordion key={sector.getId()} defaultValue={sector.getName()}>
         <Accordion.Item value={sector.getName()}>
@@ -90,15 +92,14 @@ const StyleManager = ({ sectors }: any) => {
             >{sector.getName()}</Text>
           </Accordion.Control>
           <Accordion.Panel>
-            {console.log(sector.getProperties())}
-            {sector.getProperties().map((property: any) => {
+             {sector.getProperties().map((property: any) => {
               return <StylePropertyField key={property.getId()} prop={property} />
             })}
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
     })}
-  </Stack>
+  </ScrollArea.Autosize>
 }
 
 interface StylePropertyFieldProps extends React.HTMLProps<HTMLDivElement> {
@@ -107,8 +108,7 @@ interface StylePropertyFieldProps extends React.HTMLProps<HTMLDivElement> {
 const StylePropertyField = ({
   prop,
 }: StylePropertyFieldProps) => {
-  console.log(JSON.stringify(prop, null, 2));
-
+ 
   const Icon = ({ Label }: { Label: React.ElementType }) => {
     return (
       <Center style={{ gap: 10 }}>
@@ -129,6 +129,7 @@ const StylePropertyField = ({
 
   const openAssets = () => {
     console.log("openAssets");
+
   }
 
   let inputToRender: React.ReactNode = (<TextInput value={valueWithDef} onChange={(e) => handleChange(e.target.value!)} />)
@@ -142,7 +143,7 @@ const StylePropertyField = ({
             label: selectProp.getOptionLabel(option),
           }
         })
-      } value={selectProp.getValue() ?? ""} onChange={(value) => selectProp.setValue(value!)} placeholder={selectProp.getLabel()} label={selectProp.getLabel()} />
+      } value={selectProp.getValue() ?? ""} onChange={(value) => selectProp.setValue(value!)} placeholder={selectProp.getLabel()}   />
     }
       break;
     case 'radio': {
@@ -160,7 +161,7 @@ const StylePropertyField = ({
     }
       break;
     case 'color': {
-      inputToRender = <ColorPicker value={valueWithDef} onChange={(value) => handleChange(value!)} />
+      inputToRender = <ColorInput type="color" value={valueWithDef} onChange={(value) => handleChange(value!)} />
     }
       break;
     case 'slider': {
@@ -176,82 +177,97 @@ const StylePropertyField = ({
     }
       break;
     case 'file': {
-      inputToRender = <Button
-        onClick={openAssets}
-      >Upload</Button>
+      const fileProp = prop as FilePropertyBag
+      console.log({fileProp}, value, defaultValue)
+      inputToRender =   <div className="flex flex-col items-center gap-3">
+      {value && value !== defaultValue && (
+        <div
+          className="w-[50px] h-[50px] rounded inline-block bg-cover bg-center cursor-pointer"
+          style={{ backgroundImage: `url("${value}")` }}
+          onClick={() => handleChange('')}
+        />
+      )}
+      <button type="button" onClick={openAssets} className='bg-white text-black'>
+        Select Image
+      </button>
+    </div>
     }
       break;
 
     case 'composite': {
       const compositeProp = prop as PropertyComposite;
-      inputToRender = <Stack>
+      inputToRender = <Group 
+      wrap="nowrap"
+      >
         {compositeProp.getProperties().map((option: any) => {
           return <StylePropertyField key={option.getId()} prop={option} />
         })}
-      </Stack>
+      </Group>
     }
       break;
 
-    case 'stack': {
-      const stackProp = prop as PropertyStack;
-      const layers = stackProp.getLayers();
-      const isTextShadow = stackProp.getName() === 'text-shadow';
-      inputToRender = (
-        <div
+    case 'stack':  {
 
-        >
-          {layers.map((layer) => (
-            <div key={layer.getId()}  >
-              <div className="flex gap-1 bg-slate-800 px-2 py-1 items-center">
-                <ActionIcon
-                  size="small"
-                  onClick={() => layer.move(layer.getIndex() - 1)}
-                >
-                  <Icon Label={IconCar} />
-                </ActionIcon>
-                <ActionIcon
-                  size="small"
-                  onClick={() => layer.move(layer.getIndex() + 1)}
-                >
-                  <Icon Label={IconCar} />
-                </ActionIcon>
-                <button className="flex-grow" onClick={() => layer.select()}>
-                  {layer.getLabel()}
-                </button>
-                <div
-                  //   className={cx(
-                  //   'bg-white min-w-[17px] min-h-[17px] text-black text-sm flex justify-center',
-
-                  // )}
-                  style={layer.getStylePreview({
-                    number: { min: -3, max: 3 },
-                    camelCase: true,
-                  })}
-                >
-                  {isTextShadow && 'T'}
+      {
+        const stackProp = prop as PropertyStack;
+        const layers = stackProp.getLayers();
+        const isTextShadow = stackProp.getName() === 'text-shadow';
+        inputToRender = (
+          <div
+            className='flex flex-col p-2 gap-2   min-h-[54px]'
+          >
+            {layers.map((layer) => (
+              <div key={layer.getId()} className='rounded-md  '>
+                <div className="flex gap-1  px-2 py-1 items-center">
+                  <ActionIcon
+                    size="sm"
+                    onClick={() => layer.move(layer.getIndex() - 1)}
+                  >
+                    <Icon  Label={IconChevronUp} />
+                  </ActionIcon>
+                  <ActionIcon
+                    size="sm"
+                    onClick={() => layer.move(layer.getIndex() + 1)}
+                  >
+                    <Icon  Label={IconChevronDown} />
+                  </ActionIcon>
+                  <button className="flex-grow" onClick={() => layer.select()}>
+                    {layer.getLabel()}
+                  </button>
+                  <div
+                    className={ 
+                      'bg-white min-w-[17px] min-h-[17px] text-black text-sm flex justify-center'
+                      }
+                    style={layer.getStylePreview({
+                      number: { min: -3, max: 3 },
+                      camelCase: true,
+                    })}
+                  >
+                    {isTextShadow && 'T'}
+                  </div>
+                  <ActionIcon size="sm" onClick={() => layer.remove()} variant="outline">
+                    <Icon  Label={IconTrashFilled} />
+                  </ActionIcon>
                 </div>
-                <ActionIcon size="small" onClick={() => layer.remove()}>
-                  <Icon Label={IconTrashFilled} />
-                </ActionIcon>
+                {layer.isSelected() && (
+                  <div className="p-2 flex flex-wrap">
+                    {stackProp.getProperties().map((prop) => (
+                      <StylePropertyField key={prop.getId()} prop={prop} />
+                    ))}
+                  </div>
+                )}
               </div>
-              {layer.isSelected() && (
-                <div className="p-2 flex flex-wrap">
-                  {stackProp.getProperties().map((prop) => (
-                    <StylePropertyField key={prop.getId()} prop={prop} />
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      );
+            ))}
+          </div>
+        );
+      }
     }
       break;
     default:
-     null
+     inputToRender = <TextInput value={valueWithDef} onChange={(e) => handleChange(e.target.value!)} />
   }
-  return <Stack gap={5}>
-    <div className="flex-grow capitalize">{prop.getLabel()}</div>
+  return <Stack  gap={0} >
+    <Text size="sm">{prop.getLabel()}</Text>
     {inputToRender}
   </Stack>
 }
@@ -265,12 +281,11 @@ const BlocksManager = ({
   dragStop,
 
 }: any) => {
-  console.log(JSON.stringify(mapCategoryBlocks, null, 2));
-  return < >
+   return < >
     {Array.from(mapCategoryBlocks as any).map(([category, blocks]: any) => {
       return <Stack key={category} >
         <Text size="md"
-          className=" bg-slate-800 p-2 rounded-md"
+          className=" p-2 rounded-md"
         >{category}</Text>
         <SimpleGrid cols={4}>
           {blocks.map((block: any) => {
