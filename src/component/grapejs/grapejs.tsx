@@ -63,9 +63,9 @@ const existingHtml = `<section id="services" data-gjs-type="services" class="px-
 
 export const Grapejs = () => {
   const onEditor = (editor: Editor) => {
-     editor.setComponents(existingHtml)
+
   };
- 
+
 
   const canvasConfig: EditorConfig["canvas"] = {
     scripts: ["https://vjs.zencdn.net/7.19.2/video.min.js", 'https://cdn.tailwindcss.com'],
@@ -73,13 +73,29 @@ export const Grapejs = () => {
 
   const editorOptions: EditorConfig = useMemo(() => {
     return {
-      height: "100vh",
+      height: '100vh',
       storageManager: false,
-    
-      blockManager: {
-        blocks: [],
+      undoManager: { trackSelection: false },
+      selectorManager: { componentFirst: true },
+      projectData: {
+        assets: [
+          'https://via.placeholder.com/350x250/78c5d6/fff',
+          'https://via.placeholder.com/350x250/459ba8/fff',
+          'https://via.placeholder.com/350x250/79c267/fff',
+          'https://via.placeholder.com/350x250/c5d647/fff',
+          'https://via.placeholder.com/350x250/f28c33/fff',
+        ],
+        
+        pages: [
+          {
+            name: 'Home page',
+            component: existingHtml,
+            
+          },
+        ],
+
       },
-      canvas: canvasConfig,
+      canvas: canvasConfig
     };
   }, []);
 
@@ -97,11 +113,16 @@ export const Grapejs = () => {
       onEditor={onEditor}
     >
       <AppShell aside={{ width: 400, breakpoint: "sm" }}>
-        <AppShell.Header>
-          <Top  />
+        <AppShell.Header  >
+          <Top />
         </AppShell.Header>
-        <AppShell.Main>
-          <Canvas className="flex-grow gjs-custom-editor-canvas" />
+        <AppShell.Main
+            mt={30}
+        >
+          <Canvas className="flex-grow gjs-custom-editor-canvas"
+            width={window.innerWidth}
+            height={window.innerHeight}
+          />
         </AppShell.Main>
         <AppShell.Aside>
           <RightBar />
@@ -111,4 +132,3 @@ export const Grapejs = () => {
   );
 };
 
- 
