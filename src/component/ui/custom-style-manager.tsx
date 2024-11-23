@@ -1,4 +1,4 @@
-import { ScrollArea, Accordion, Text } from "@mantine/core"
+import { ScrollArea, Accordion, Text, Stack } from "@mantine/core"
 import { StylePropertyField } from "./style-property-field"
 
 export const CustomStyleManager = ({ sectors }: any) => {
@@ -19,9 +19,13 @@ export const CustomStyleManager = ({ sectors }: any) => {
               >{sector.getName()}</Text>
             </Accordion.Control>
             <Accordion.Panel>
-              {sector.getProperties().map((property: any) => {
-                return <StylePropertyField key={property.getId()} prop={property} />
+              <Stack gap='xs'>
+                {console.log( sector.getProperties()) }
+              {  console.log(sector)}
+                {sector.getProperties().map((property: any) => {
+                  return <StylePropertyField key={property.getId()} prop={property} />
               })}
+              </Stack>
             </Accordion.Panel>
           </Accordion.Item>
         </Accordion>

@@ -20,7 +20,7 @@ export const CustomAssetManager = ({
                 onClick={() => select(asset, true)}
             >
                 <Image src={asset.getSrc()} />
-                <ActionIcon onClick={() => remove(asset)}>
+                <ActionIcon onClick={() => remove(asset)} variant='transparent' color='red'>
                     <IconTrash />
                 </ActionIcon>
             </div>

@@ -21,13 +21,14 @@ const style = {
     p: 2,
 };
 
-interface CustomModalProps extends Omit<ModalProps, 'title' | 'onClose'> {
+interface CustomModalProps extends Omit<ModalProps, 'title' | 'onClose' | 'children'|'content'> {
     title: React.ReactNode;
     close: () => void;
+    content: React.ReactNode;
 }
 
 export default function CustomModal({
-    children,
+    content,
     title,
     close,
     ...props
@@ -44,7 +45,7 @@ export default function CustomModal({
                         <IconX />
                     </div>
                 </div>
-                <div className="flex-grow overflow-y-auto">{children}</div>
+                <div className="flex-grow overflow-y-auto">{content}</div>
             </Box>
 
         </Modal>

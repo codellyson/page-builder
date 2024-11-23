@@ -1,4 +1,4 @@
-import grapesjs, { Editor, EditorConfig } from "grapesjs";
+import grapesjs, { Asset, Editor, EditorConfig } from "grapesjs";
 import GjsEditor, {
   AssetsProvider,
   Canvas,
@@ -10,6 +10,8 @@ import { useMemo } from "react";
 import { AppShell } from "@mantine/core";
 import { Top } from "../ui/top";
 import { RightBar } from "../ui/right-bar";
+import CustomModal from "../ui/custom-modal-manager";
+import { CustomAssetManager } from "../ui/custom-asset-manager";
 
 const existingHtml = `<section id="services" data-gjs-type="services" class="px-4 py-16 bg-white lg:py-32 gjs-block-section">
       <div class="flex flex-col items-center justify-center mx-auto max-w-[1200px]">
@@ -85,12 +87,12 @@ export const Grapejs = () => {
           'https://via.placeholder.com/350x250/c5d647/fff',
           'https://via.placeholder.com/350x250/f28c33/fff',
         ],
-        
+
         pages: [
           {
             name: 'Home page',
             component: existingHtml,
-            
+
           },
         ],
 
@@ -117,7 +119,7 @@ export const Grapejs = () => {
           <Top />
         </AppShell.Header>
         <AppShell.Main
-            mt={30}
+          mt={30}
         >
           <Canvas className="flex-grow gjs-custom-editor-canvas"
             width={window.innerWidth}
@@ -128,6 +130,17 @@ export const Grapejs = () => {
           <RightBar />
         </AppShell.Aside>
       </AppShell>
+
+      <ModalProvider>
+        {({ open, title, content, close }) => <CustomModal opened={open} title={title} content={content} close={close} />}
+      </ModalProvider>
+      <AssetsProvider>
+        {({ assets, select, close, Container }) => <Container> <CustomAssetManager assets={assets} select={select} close={close} /></Container>}
+      </AssetsProvider>
+
+
+
+
     </GjsEditor>
   );
 };
