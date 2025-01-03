@@ -10,7 +10,7 @@ interface StylePropertyFieldProps extends React.HTMLProps<HTMLDivElement> {
   trait: Trait;
 }
 
-export default function TraitPropertyField({
+export   function TraitPropertyField({
   trait,
  }: StylePropertyFieldProps) {
   const editor = useEditor();

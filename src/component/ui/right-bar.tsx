@@ -1,6 +1,6 @@
 import { Box, Center, SegmentedControl, Stack, Text } from "@mantine/core";
 import React, { useState } from "react";
-import { IconAlignBoxCenterStretch, IconBrush, IconLayersDifference, IconLayoutGrid, IconNotes, IconSettings, IconStack } from "@tabler/icons-react";
+import { IconBrush, IconLayoutGrid, IconNotes, IconSettings, IconStack } from "@tabler/icons-react";
 import { BlocksProvider, LayersProvider, PagesProvider, StylesProvider, TraitsProvider } from "@grapesjs/react";
  
 import { CustomStyleManager } from "./custom-style-manager";
@@ -53,8 +53,16 @@ export const RightBar = () => {
           data={g_UI_CONTROLS}
           onChange={(value) => setSelected(value)}
           fullWidth
-          size="sm"
-          h={30}
+          size="lg"
+          color="dark"
+          variant="filled"
+          
+         
+          classNames={{
+            root: "bg-transparent",
+            control: "bg-transparent",
+            label: "text-white",
+          }}
         />
         {selected === "1" && <StylesProvider>
           {(props) => <CustomStyleManager {...props} />}

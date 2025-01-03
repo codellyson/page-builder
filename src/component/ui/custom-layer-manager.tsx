@@ -125,7 +125,7 @@ export   function CustomLayerManager({
         <LayerItem
           component={root}
           level={-1}
-          draggingComponent={dragging}
+          draggingCmp={dragging}
           dragParent={dragParent}
         />
       )}

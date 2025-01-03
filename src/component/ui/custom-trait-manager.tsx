@@ -1,6 +1,6 @@
 
 import { TraitsResultProps } from '@grapesjs/react';
-import TraitPropertyField from './trait-property-field';
+import { TraitPropertyField } from './trait-property-field';
 import { Box, Text } from '@mantine/core';
 
 export default function CustomTraitManager({ traits }: Omit<TraitsResultProps, 'Container'>) {
